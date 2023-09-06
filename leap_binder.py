@@ -231,6 +231,3 @@ leap_binder.add_custom_loss(EPE, 'EPE')
 leap_binder.add_custom_metric(fl_metric, 'FL-all')
 leap_binder.add_custom_metric(fl_foreground, 'FL-fg')
 leap_binder.add_custom_metric(fl_background, 'FL-bg')
-
-if __name__ == '__main__':
-    leap_binder.check()
