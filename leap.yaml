@@ -1,12 +1,10 @@
-codeIntegrationId: 64aff30fc0e3b300186d4e5f
-projectId: ""
-secretManagerId: ""
-entryFile: tensorleap.py
+codeIntegrationId: 66a9055fcfc10966555ef097
+projectId: 66a9055bcfc10966555ef093
+secretId: 6672a0e79cc9e3c8635a3927
+entryFile: leap_binder.py
 include:
     - leap_binder.py
     - optical_flow_raft/data/preprocess.py
     - optical_flow_raft/utils/flow_utils.py
     - optical_flow_raft/utils/gcs_utils.py
     - optical_flow_raft/config.py
-
-

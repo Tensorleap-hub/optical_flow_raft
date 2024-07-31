@@ -11,6 +11,7 @@ from code_loader.contract.visualizer_classes import LeapImage
 from code_loader.contract.enums import (
     LeapDataType
 )
+from numpy import ndarray
 
 from optical_flow_raft.config import BUCKET_NAME, MAX_SCENE, MAX_STEREO, IMG_SIZE
 from optical_flow_raft.data.preprocess import get_kitti_data
@@ -75,7 +76,7 @@ def masked_of_percent(gt: np.ndarray) -> float:
     return 100 * gt[..., -1].sum() / (gt.shape[0] * gt.shape[1])
 
 
-def average_of_magnitude(gt: np.ndarray) -> float:
+def average_of_magnitude(gt: np.ndarray) -> ndarray:
     return np.mean(np.sqrt(gt[gt[..., -1].astype(bool), 0] ** 2 + (gt[gt[..., -1].astype(bool), 1]) ** 2))
 
 
@@ -95,8 +96,8 @@ def metadata_dict(idx: int, data: PreprocessResponse) -> Dict[str, Union[float, 
     gt = gt_encoder(idx, data)
     res = {
         "masked_of_percent": masked_of_percent(gt),
-        "average_of_magnitude": average_of_magnitude(gt),
-        "mu_over_sigma_of": mu_over_sigma_of(gt)
+        "average_of_magnitude": np.float64(average_of_magnitude(gt)),
+        "mu_over_sigma_of": np.float64(mu_over_sigma_of(gt))
     }
     return res
 
@@ -217,7 +218,6 @@ leap_binder.set_metadata(dataset_name, 'dataset name')
 leap_binder.set_metadata(metadata_focus_of_expansion, 'metadata_focus_of_expansion')
 leap_binder.set_metadata(metadata_dict, 'metadata_dict')
 
-
 # set visualizer
 leap_binder.set_visualizer(image_visualizer, 'image_visualizer', LeapDataType.Image)
 leap_binder.set_visualizer(flow_visualizer, 'flow_visualizer', LeapDataType.Image)
@@ -231,3 +231,6 @@ leap_binder.add_custom_loss(EPE, 'EPE')
 leap_binder.add_custom_metric(fl_metric, 'FL-all')
 leap_binder.add_custom_metric(fl_foreground, 'FL-fg')
 leap_binder.add_custom_metric(fl_background, 'FL-bg')
+
+if __name__ == '__main__':
+    leap_binder.check()

@@ -7,7 +7,8 @@ from os import environ
 from os.path import exists
 import urllib
 
-def check_custom_integration():    # This test requires the relevant secret to be loaded to the system environment AUTH_SECRET
+
+def check_custom_integration():  # This test requires the relevant secret to be loaded to the system environment AUTH_SECRET
     if environ.get('AUTH_SECRET') is None:
         print("The AUTH_SECRET system variable must be initialized with the relevant secret to run this test")
         exit(-1)
@@ -26,7 +27,7 @@ def check_custom_integration():    # This test requires the relevant secret to b
     input_name_2 = sess.get_inputs()[1].name
     label_name = sess.get_outputs()[-1].name
     pred = sess.run([label_name], {input_name_1: np.moveaxis(img_1.astype(np.float32), [1, 2, 3], [2, 3, 1]),
-                            input_name_2: np.moveaxis(img_2.astype(np.float32), [1, 2, 3], [2, 3, 1])})[
+                                   input_name_2: np.moveaxis(img_2.astype(np.float32), [1, 2, 3], [2, 3, 1])})[
         0]
     pred = np.moveaxis(pred, [1, 2, 3], [3, 1, 2])
     # get gt and add batch so its shape would be [1,H,W,2]
@@ -57,6 +58,7 @@ def check_custom_integration():    # This test requires the relevant secret to b
     sample_fl_fg_metric = fl_foreground(gt, pred, foreground_mask)
     sample_fl_bg_metric = fl_background(gt, pred, foreground_mask)
     print("Custom tests finished successfully")
+
 
 if __name__ == "__main__":
     check_custom_integration()
