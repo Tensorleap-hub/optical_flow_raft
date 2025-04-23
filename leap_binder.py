@@ -138,10 +138,12 @@ def metadata_idx(idx: int, data: PreprocessResponse) -> int:
 
 
 def image_visualizer(image: npt.NDArray[np.float32]) -> LeapImage:
+    image = np.squeeze(image)
     return LeapImage(image[..., ::-1])
 
 
 def flow_visualizer(flow: npt.NDArray[np.float32]) -> LeapImage:
+    flow = np.squeeze(flow)
     img = flow_to_image(flow)
     return LeapImage(img)
 
@@ -153,19 +155,22 @@ def gt_visualizer(flow: npt.NDArray[np.float32]) -> LeapImage:
 
 
 def mask_visualizer(mask: npt.NDArray[np.uint8]) -> LeapImage:
+    mask = np.squeeze(mask)
     return LeapImage((mask[..., None].repeat(3, axis=2) * 255).astype(np.uint8))
 
 
 # -------------------------------------------------------- metrics  -------------------------------------------------
 
 
-def EPE(gt_flow: tf.Tensor, pred_flow: tf.Tensor) -> tf.Tensor:
+def EPE(gt_flow: npt.NDArray[np.float32], pred_flow: npt.NDArray[np.float32]) -> npt.NDArray[np.float32]:
     # gt_flow shape: (batch_size, height, width, 2)
     # pred_flow shape: (batch_size, height, width, 2)
     # v_gt - v_pred u_gt - u_pred
+    gt_flow = tf.convert_to_tensor(gt_flow)
+    pred_flow = tf.convert_to_tensor(pred_flow)
     pixel_err = EPE_mask(gt_flow, pred_flow)
     sample_err = tf.reduce_mean(pixel_err, axis=[1, 2])
-    return sample_err
+    return sample_err.numpy()
 
 
 def fg_mask(idx: int, subset: PreprocessResponse) -> np.ndarray:
@@ -177,25 +182,34 @@ def fg_mask(idx: int, subset: PreprocessResponse) -> np.ndarray:
         return np.ones_like(input_image1(idx, subset)[..., 0]).astype(np.float32)
 
 
-def fl_metric(gt_flow: tf.Tensor, pred_flow: tf.Tensor) -> tf.Tensor:
+def fl_metric(gt_flow: npt.NDArray[np.float32], pred_flow:npt.NDArray[np.float32]) -> npt.NDArray[np.float32]:
+    gt_flow = tf.convert_to_tensor(gt_flow)
+    pred_flow = tf.convert_to_tensor(pred_flow)
     fl_map = get_fl_map(gt_flow, pred_flow)
     outliers_num = tf.math.count_nonzero(fl_map, axis=[1, 2])
-    return outliers_num / (tf.maximum(tf.math.count_nonzero(gt_flow[..., -1], axis=[1, 2]), 1))
+    f1 = outliers_num / (tf.maximum(tf.math.count_nonzero(gt_flow[..., -1], axis=[1, 2]), 1))
+    return f1.numpy()
 
 
-def fl_foreground(gt_flow: tf.Tensor, pred_flow: tf.Tensor, foreground_map: tf.Tensor) -> tf.Tensor:
+def fl_foreground(gt_flow: npt.NDArray[np.float32], pred_flow: npt.NDArray[np.float32], foreground_map: npt.NDArray[np.float32]) -> npt.NDArray[np.float32]:
+    gt_flow = tf.convert_to_tensor(gt_flow)
+    pred_flow = tf.convert_to_tensor(pred_flow)
     fl_map = tf.cast(get_fl_map(gt_flow, pred_flow), float) * foreground_map
     outliers_num = tf.math.count_nonzero(fl_map, axis=[1, 2])
     combined_mask = gt_flow[..., -1] * foreground_map
-    return outliers_num / (tf.maximum(tf.math.count_nonzero(combined_mask, axis=[1, 2]), 1))
+    f1 = outliers_num / (tf.maximum(tf.math.count_nonzero(combined_mask, axis=[1, 2]), 1))
+    return f1.numpy()
 
 
-def fl_background(gt_flow: tf.Tensor, pred_flow: tf.Tensor, foreground_map: tf.Tensor) -> tf.Tensor:
+def fl_background(gt_flow: npt.NDArray[np.float32], pred_flow: npt.NDArray[np.float32], foreground_map: npt.NDArray[np.float32]) -> npt.NDArray[np.float32]:
+    gt_flow = tf.convert_to_tensor(gt_flow)
+    pred_flow = tf.convert_to_tensor(pred_flow)
     background_mask = 1 - foreground_map
     fl_map = tf.cast(get_fl_map(gt_flow, pred_flow), float) * background_mask
     outliers_num = tf.math.count_nonzero(fl_map, axis=[1, 2])
     combined_mask = gt_flow[..., -1] * background_mask
-    return outliers_num / (tf.maximum(tf.math.count_nonzero(combined_mask, axis=[1, 2]), 1))
+    f1 = outliers_num / (tf.maximum(tf.math.count_nonzero(combined_mask, axis=[1, 2]), 1))
+    return f1.numpy()
 
 
 # -------------------------------------------------------- binding  -------------------------------------------------
