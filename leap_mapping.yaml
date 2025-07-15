@@ -57,6 +57,7 @@ decorators:
       arg_names:
         - gt_flow
         - pred_flow
+      user_unique_name: EPE
       name: EPE
       selected: EPE
       type: CustomLoss
@@ -71,22 +72,6 @@ decorators:
         - outputKey: mask
           operation: GroundTruth
           id: '6745'
-    outputs:
-      loss:
-        - inputKey: '0'
-          operation: Adam
-          id: '6747'
-  - operation: Adam
-    data:
-      type: Optimizer
-      custom_input_keys:
-        - 6747-0
-    id: '6747'
-    inputs:
-      '0':
-        - outputKey: loss
-          operation: CustomLoss
-          id: '6746'
     outputs: {}
   - operation: Visualizer
     data:
