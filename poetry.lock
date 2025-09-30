@@ -158,18 +158,19 @@ files = [
 
 [[package]]
 name = "code-loader"
-version = "1.0.91"
+version = "1.0.136"
 description = ""
 optional = false
-python-versions = "<3.12,>=3.8"
+python-versions = "<3.13,>=3.8"
 groups = ["main"]
 files = [
-    {file = "code_loader-1.0.91-py3-none-any.whl", hash = "sha256:46e66b2d66327496c8af2bb741a09de4f4b34cba0e628d74a43fdea23a367a56"},
-    {file = "code_loader-1.0.91.tar.gz", hash = "sha256:d4a4ad6a76a6106ec3a2bfebd2600f0047b9be6569691c1edba68563e7453c3b"},
+    {file = "code_loader-1.0.136-py3-none-any.whl", hash = "sha256:5aa1a464153120084afb90f9ee01f00f2d481dd49523a5f6484e8abcd6b05e5e"},
+    {file = "code_loader-1.0.136.tar.gz", hash = "sha256:102f767252d1847ec91b34860859f134a7ae3ee396bfc239bc21d3da3ff0a425"},
 ]
 
 [package.dependencies]
-numpy = ">=1.22.3,<2.0.0"
+mixpanel = ">=4.10.0,<5.0.0"
+numpy = {version = ">=1.22.3,<2.0.0", markers = "python_version >= \"3.8\" and python_version < \"3.11\""}
 psutil = ">=5.9.5,<6.0.0"
 pyyaml = ">=6.0.2,<7.0.0"
 requests = ">=2.32.3,<3.0.0"
@@ -1165,6 +1166,23 @@ packaging = ">=20.0"
 pillow = ">=6.2.0"
 pyparsing = ">=2.3.1"
 python-dateutil = ">=2.7"
+
+[[package]]
+name = "mixpanel"
+version = "4.10.1"
+description = "Official Mixpanel library for Python"
+optional = false
+python-versions = ">=2.7, !=3.4.*"
+groups = ["main"]
+files = [
+    {file = "mixpanel-4.10.1-py2.py3-none-any.whl", hash = "sha256:a7a338b7197327e36356dbc1903086e7626db6d88367ccdd732b3f3c60d3b3ed"},
+    {file = "mixpanel-4.10.1.tar.gz", hash = "sha256:29a6b5773dd34f05cf8e249f4e1d16e7b6280d6b58894551ce9a5aad7700a115"},
+]
+
+[package.dependencies]
+requests = ">=2.4.2"
+six = ">=1.9.0"
+urllib3 = "*"
 
 [[package]]
 name = "ml-dtypes"
@@ -2246,4 +2264,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "58a171b6707ccabf8715ee764f91001f1cba7cd0404f3eb037ca25917c46e9b1"
+content-hash = "cfe191618af6bee8939d1aace642d40c0e1aabe11e85e033c71f637c69e39fcc"

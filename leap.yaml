@@ -1,7 +1,7 @@
-codeIntegrationId: 68734fd04125981272b10f1e
-projectId: 6873bafe4125981272b10ff5
-secretId: 68734f904125981272b10f1a
-entryFile: leap_binder.py
+codeIntegrationId: 68dbeb31fb29594dfe6450db
+projectId: 68dbeb2cfb29594dfe6450d5
+secretId: 68cfa287149a19afa0a2d701
+entryFile: leap_integration.py
 include:
     - leap_binder.py
     - optical_flow_raft/data/preprocess.py
@@ -9,4 +9,5 @@ include:
     - optical_flow_raft/utils/gcs_utils.py
     - optical_flow_raft/config.py
     - requirements.txt
+    - leap_integration.py
 pythonVersion: py39
