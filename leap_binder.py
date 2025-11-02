@@ -218,39 +218,5 @@ def fl_background(gt_flow: np.ndarray, pred_flow: np.ndarray, foreground_map: np
     return (outliers_num / (tf.maximum(tf.math.count_nonzero(combined_mask, axis=[1, 2]), 1))).numpy()
 
 
-# -------------------------------------------------------- binding  -------------------------------------------------
-# preprocess function
-#leap_binder.set_preprocess(subset_images)
-
-# set input and gt
-#leap_binder.set_input(input_image1, 'image1')
-#leap_binder.set_input(input_image2, 'image2')
-#leap_binder.set_input(fg_mask, 'fg_mask')
-#leap_binder.set_ground_truth(gt_encoder, 'mask')
-
-# set prediction
-#leap_binder.add_prediction()
-
-# set meata_data
-#leap_binder.set_metadata(metadata_idx, 'idx')
-#leap_binder.set_metadata(metadata_filename, 'filename')
-#leap_binder.set_metadata(dataset_name, 'dataset name')
-#leap_binder.set_metadata(metadata_focus_of_expansion, 'metadata_focus_of_expansion')
-#leap_binder.set_metadata(metadata_dict, 'metadata_dict')
-
-# set visualizer
-#leap_binder.set_visualizer(image_visualizer, 'image_visualizer', LeapDataType.Image)
-#leap_binder.set_visualizer(flow_visualizer, 'flow_visualizer', LeapDataType.Image)
-#leap_binder.set_visualizer(gt_visualizer, 'gt_visualizer', LeapDataType.Image)
-#leap_binder.set_visualizer(mask_visualizer, 'fg_visualizer', LeapDataType.Image)
-
-# set loss
-#leap_binder.add_custom_loss(EPE, 'EPE')
-
-# set custom metrics
-#leap_binder.add_custom_metric(fl_metric, 'FL-all')
-#leap_binder.add_custom_metric(fl_foreground, 'FL-fg')
-#leap_binder.add_custom_metric(fl_background, 'FL-bg')
-
 if __name__ == '__main__':
     leap_binder.check()

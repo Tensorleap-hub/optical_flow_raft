@@ -1,7 +1,7 @@
 import os
 from leap_binder import *
 from os import environ
-from code_loader.inner_leap_binder.leapbinder_decorators import tensorleap_load_model, integration_test
+from code_loader.inner_leap_binder.leapbinder_decorators import tensorleap_load_model, tensorleap_integration_test
 from code_loader.contract.datasetclasses import PredictionTypeHandler
 from code_loader.plot_functions.visualize import visualize
 import onnxruntime
@@ -16,7 +16,7 @@ def load_model():
     return sess
 
 
-@integration_test()
+@tensorleap_integration_test()
 def check_custom_integration(idx, subset):  # This test requires the relevant secret to be loaded to the system environment AUTH_SECRET
     if environ.get('AUTH_SECRET') is None:
         print("The AUTH_SECRET system variable must be initialized with the relevant secret to run this test")
