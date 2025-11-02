@@ -4,4 +4,3 @@ onnxruntime==1.14.1
 scikit-learn>=1.0.3
 numpy==1.23.0
 matplotlib==3.7.1
-code-loader==1.0.143.dev4
