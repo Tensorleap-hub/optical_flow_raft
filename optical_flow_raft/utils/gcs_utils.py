@@ -23,11 +23,18 @@ def _connect_to_gcs_and_return_bucket(bucket_name: str) -> Bucket:
     gcs_client = storage.Client(project=project, credentials=credentials)
     return gcs_client.bucket(bucket_name)
 
+def is_fsx_mounted() -> bool:
+    is_cloud = os.getenv("IS_CLOUD")
+    fsx_enabled = os.getenv("FSX_ENABLED")
+    return bool(is_cloud and fsx_enabled)
 
 def download(cloud_file_path: str, bucket_name: str, local_file_path: Optional[str] = None) -> str:
     # if local_file_path is not specified saving in home dir
+    use_fsx=is_fsx_mounted()
+    if not local_file_path is None and use_fsx and not local_file_path.startswith("/fsx") :
+        local_file_path = local_file_path.replace(os.getenv("HOME", "/home/ubuntu"), "/fsx", 1)
     if local_file_path is None:
-        home_dir = getenv("HOME")
+        home_dir = "/fsx" if use_fsx else os.getenv("HOME")
         local_file_path = path.join(home_dir, "Tensorleap", bucket_name, cloud_file_path)
 
     # check if file already exists
