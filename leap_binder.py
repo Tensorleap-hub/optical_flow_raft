@@ -9,7 +9,7 @@ import numpy.typing as npt
 import json
 from code_loader.contract.visualizer_classes import LeapImage
 from code_loader.contract.enums import (
-    LeapDataType
+    LeapDataType, MetricDirection
 )
 from code_loader.inner_leap_binder.leapbinder_decorators import tensorleap_preprocess, tensorleap_input_encoder, \
     tensorleap_gt_encoder, tensorleap_metadata, tensorleap_custom_visualizer, tensorleap_custom_loss, \
@@ -185,7 +185,7 @@ def fg_mask(idx: int, subset: PreprocessResponse) -> np.ndarray:
     elif subset.data['dataset_name'] == 'stereo_flow':
         return np.ones_like(np.transpose(input_image1(idx, subset), [1,2,0])[..., 0]).astype(np.float32)
 
-@tensorleap_custom_metric('FL-all')
+@tensorleap_custom_metric('FL-all',direction=MetricDirection.Downward)
 def fl_metric(gt_flow: np.ndarray, pred_flow: np.ndarray) -> np.ndarray:
     gt_flow = tf.convert_to_tensor(gt_flow)
     pred_flow = np.transpose(pred_flow, [0, 2, 3, 1])# Channel First to Last
@@ -194,7 +194,7 @@ def fl_metric(gt_flow: np.ndarray, pred_flow: np.ndarray) -> np.ndarray:
     outliers_num = tf.math.count_nonzero(fl_map, axis=[1, 2])
     return (outliers_num / (tf.maximum(tf.math.count_nonzero(gt_flow[..., -1], axis=[1, 2]), 1))).numpy()
 
-@tensorleap_custom_metric('FL-fg')
+@tensorleap_custom_metric('FL-fg',direction=MetricDirection.Downward)
 def fl_foreground(gt_flow: np.ndarray, pred_flow: np.ndarray, foreground_map: np.ndarray) -> np.ndarray:
     gt_flow = tf.convert_to_tensor(gt_flow)
     pred_flow = np.transpose(pred_flow, [0, 2, 3, 1])# Channel First to Last
@@ -205,7 +205,7 @@ def fl_foreground(gt_flow: np.ndarray, pred_flow: np.ndarray, foreground_map: np
     combined_mask = gt_flow[..., -1] * foreground_map
     return (outliers_num / (tf.maximum(tf.math.count_nonzero(combined_mask, axis=[1, 2]), 1))).numpy()
 
-@tensorleap_custom_metric('FL-bg')
+@tensorleap_custom_metric('FL-bg',direction=MetricDirection.Downward)
 def fl_background(gt_flow: np.ndarray, pred_flow: np.ndarray, foreground_map: np.ndarray) -> np.ndarray:
     gt_flow = tf.convert_to_tensor(gt_flow)
     pred_flow = np.transpose(pred_flow, [0, 2, 3, 1]) # Channel First to Last
