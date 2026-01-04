@@ -6,7 +6,7 @@ from code_loader.contract.datasetclasses import PredictionTypeHandler
 from code_loader.plot_functions.visualize import visualize
 import onnxruntime
 
-prediction_type1 = PredictionTypeHandler('opt_flow', ["x", "y"],channel_dim=-1)
+prediction_type1 = PredictionTypeHandler('opt_flow', ["x", "y"], channel_dim=-1)
 
 @tensorleap_load_model([prediction_type1])
 def load_model():
